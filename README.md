@@ -1,6 +1,4 @@
-# kitap-degistirme-programi
-Kitabın kayıtlı kullanıcılar arasında değiş tokuş edildiği program
- Güvenli Kimlik Doğrulama Sistemi
+# Güvenli Kimlik Doğrulama Sistemi
 
 Bu proje, modern ve güvenli bir kimlik doğrulama sistemi sunmaktadır. Aşağıdaki özellikleri içerir:
 
