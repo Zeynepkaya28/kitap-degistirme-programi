@@ -1,81 +1,55 @@
-# Güvenli Kimlik Doğrulama Sistemi
+# Veri Doğrulama ve Temizleme Örneği
 
-Bu proje, modern ve güvenli bir kimlik doğrulama sistemi sunmaktadır. Aşağıdaki özellikleri içerir:
-
-- Güvenli şifre hashleme (Argon2)
-- E-posta doğrulama
-- İki faktörlü kimlik doğrulama
-- OAuth 2.0 (Google ile giriş)
-- JWT tabanlı yetkilendirme
-- Refresh token desteği
-- Şifre sıfırlama
-- Brute force koruması
-- reCAPTCHA entegrasyonu
-- SQL injection ve XSS koruması
-- KVKK ve GDPR uyumluluğu
-
-## Gereksinimler
-
-- Node.js (v14 veya üzeri)
-- PostgreSQL
-- npm veya yarn
+Bu proje, Python kullanarak veri doğrulama ve temizleme işlemlerini gösteren bir örnektir.
 
 ## Kurulum
 
-1. Projeyi klonlayın:
+1. Gerekli paketleri yükleyin:
 ```bash
-git clone https://github.com/yourusername/secure-auth-system.git
-cd secure-auth-system
+pip install -r requirements.txt
 ```
 
-2. Bağımlılıkları yükleyin:
+## Kullanım
+
+1. Uygulamayı başlatın:
 ```bash
-npm install
+python app.py
 ```
 
-3. Veritabanını oluşturun:
-```bash
-npx prisma migrate dev
+2. API Endpoint'leri:
+
+### Form Doğrulama
+- URL: `/form-dogrula`
+- Method: POST
+- Örnek veri:
+```json
+{
+    "email": "ornek@email.com",
+    "sifre": "12345678",
+    "kitap_durumu": "iyi"
+}
 ```
 
-4. .env dosyasını düzenleyin:
-- Veritabanı bağlantı bilgilerini
-- JWT anahtarlarını
-- SMTP ayarlarını
-- Google OAuth bilgilerini
-- reCAPTCHA anahtarlarını
-
-5. Uygulamayı başlatın:
-```bash
-npm run dev
+### JSON Doğrulama
+- URL: `/json-dogrula`
+- Method: POST
+- Örnek veri:
+```json
+{
+    "isbn": "978-3-16-148410-0",
+    "baslik": "Örnek Kitap",
+    "durum": "iyi"
+}
 ```
 
-## Güvenlik Özellikleri
+## Doğrulama Kuralları
 
-- Şifreler Argon2 ile hashlenir
-- E-posta doğrulama zorunludur
-- İki faktörlü kimlik doğrulama desteği
-- 5 başarısız giriş denemesinden sonra 5 dakika bekleme süresi
-- reCAPTCHA ile bot koruması
-- SQL injection ve XSS koruması
-- Güvenli şifre sıfırlama mekanizması
-- KVKK ve GDPR uyumlu veri işleme
+### Form Doğrulama (WTForms)
+- E-posta: Geçerli e-posta formatı
+- Şifre: En az 8 karakter
+- Kitap Durumu: Sadece "iyi", "orta", "kötü" değerleri
 
-## API Endpoints
-
-### Kimlik Doğrulama
-- POST /api/auth/register - Yeni kullanıcı kaydı
-- POST /api/auth/login - Kullanıcı girişi
-- POST /api/auth/forgot-password - Şifre sıfırlama talebi
-- POST /api/auth/reset-password - Şifre sıfırlama
-- POST /api/auth/verify-email - E-posta doğrulama
-- POST /api/auth/refresh-token - Token yenileme
-
-### Kullanıcı İşlemleri
-- GET /api/users/me - Kullanıcı bilgilerini getir
-- PUT /api/users/me - Kullanıcı bilgilerini güncelle
-- DELETE /api/users/me - Hesabı sil
-
-## Lisans
-
-MIT 
+### JSON Doğrulama (Cerberus)
+- ISBN: 10 veya 13 karakter, sadece rakamlar ve tire
+- Başlık: Boş olmamalı
+- Durum: Sadece "iyi", "orta", "kötü" değerleri 
