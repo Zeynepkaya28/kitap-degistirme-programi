@@ -1,0 +1,43 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String    @id @default(uuid())
+  email             String    @unique
+  password          String
+  username          String    @unique
+  isEmailVerified   Boolean   @default(false)
+  emailVerificationToken String?
+  emailVerificationExpires DateTime?
+  resetPasswordToken String?
+  resetPasswordExpires DateTime?
+  failedLoginAttempts Int     @default(0)
+  lastLoginAttempt   DateTime?
+  isAccountLocked    Boolean  @default(false)
+  accountLockUntil   DateTime?
+  googleId          String?   @unique
+  twoFactorSecret   String?
+  isTwoFactorEnabled Boolean  @default(false)
+  accountDeletionRequested Boolean @default(false)
+  accountDeletionReason String?
+  accountDeletionRequestDate DateTime?
+  accountDeletionDate DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  sessions          Session[]
+}
+
+model Session {
+  id        String   @id @default(uuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+} 
