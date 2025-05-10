@@ -11,16 +11,19 @@ service cloud.firestore {
     // Kitaplar koleksiyonu
     match /books/{bookId} {
       allow read: if true;
-      allow write: if request.auth != null;
+      allow create: if request.auth != null && 
+        request.resource.data.isbn != null;
+      allow update: if request.auth != null;
+      allow delete: if false; // Kitaplar silinemez, sadece arşivlenebilir
     }
     
     // Kullanıcı kitapları koleksiyonu
     match /userBooks/{userBookId} {
       allow read: if true;
-      allow create: if request.auth != null;
+      allow create: if request.auth != null && 
+        request.resource.data.userId == request.auth.uid;
       allow update, delete: if request.auth != null && 
-        (resource.data.userId == request.auth.uid || 
-         request.resource.data.userId == request.auth.uid);
+        resource.data.userId == request.auth.uid;
     }
     
     // Takas istekleri koleksiyonu
@@ -34,6 +37,18 @@ service cloud.firestore {
          resource.data.receiverUserId == request.auth.uid);
       allow delete: if request.auth != null && 
         resource.data.senderUserId == request.auth.uid;
+    }
+
+    // Kitap kategorileri koleksiyonu
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Kitap etiketleri koleksiyonu
+    match /tags/{tagId} {
+      allow read: if true;
+      allow write: if request.auth != null;
     }
   }
 } 
